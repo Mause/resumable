@@ -81,21 +81,21 @@ class Visitor(ast.NodeVisitor):
             # this is the expression that contains the call,
             # or basically the value of the assignment/return
             expr = node.parent
-            assign = expr.parent
+            user = expr.parent
 
             # it's possible more are actually supported,
             # but i'm hesitant to just allow them without
             # further testing
-            assert isinstance(assign, (ast.Return, ast.Assign))
+            assert isinstance(user, (ast.Return, ast.Assign))
 
             # sanity checking
-            assert assign.parent_field == 'body', assign.parent_field
-            assert isinstance(assign.parent, ast.FunctionDef)
+            assert user.parent_field == 'body', user.parent_field
+            assert isinstance(user.parent, ast.FunctionDef)
 
-            field = getattr(assign.parent, assign.parent_field)
-            body = field[self.last_idx + 1:assign.parent_field_index]
+            field = getattr(user.parent, user.parent_field)
+            body = field[self.last_idx + 1:user.parent_field_index]
 
-            value = assign.value
+            value = user.value
             value.func = value.func.args[0]  # remove call to split
             body.append(ast.Return(value))
 
@@ -107,16 +107,16 @@ class Visitor(ast.NodeVisitor):
                 returns=[]
             )
 
-            self.last_idx = assign.parent_field_index
+            self.last_idx = user.parent_field_index
             self.name = name
-            self.args = self.get_args(assign, name)
+            self.args = self.get_args(user, name)
 
         return super().generic_visit(node)
 
-    def get_args(self, assign, name):
-        lineno = assign.lineno
+    def get_args(self, user, name):
+        lineno = user.lineno
 
-        if isinstance(assign, ast.Return):
+        if isinstance(user, ast.Return):
             if name is not None:
                 raise Exception('A closing split cannot have a name {}'.format(lineno))
         else:
@@ -125,9 +125,9 @@ class Visitor(ast.NodeVisitor):
 
         args = (
             []
-            if isinstance(assign, ast.Return)
+            if isinstance(user, ast.Return)
             else
-            [ast.arg(assign.targets[0].id, None)]
+            [ast.arg(user.targets[0].id, None)]
         )
 
         return ast.arguments(
