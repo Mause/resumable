@@ -100,6 +100,7 @@ class Visitor(ast.NodeVisitor):
             value = user.value
             value.func = value.func.args[0]  # remove call to split
             body.append(ast.Return(value))
+            body[-1].lineno = value.lineno
 
             self.current[self.name] = ast.FunctionDef(
                 name=self.name,
@@ -157,10 +158,11 @@ def extract(env, node, name):
 def rebuild(function):
     assert callable(function)
     lines, lineno = inspect.getsourcelines(function)
-    root, = ast.parse('\n'.join(lines)).body
 
-    ast.increment_lineno(root, lineno)
+    lines = ''.join(lines)
+    lines = '\n' * (lineno - 1) + lines
 
+    root, = ast.parse(lines).body
     root = ParentNodeTransformer().visit(root)
 
     visitor = Visitor()
