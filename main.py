@@ -19,13 +19,18 @@ def example(_):
 
     print('hello', value)
 
+    split(print, 'derp')()
+
     return split(get)('otherworldly')
 
 
 def main():
     arg = None
     for name, func in example.items():
-        arg = func(arg)
+        if func.__code__.co_argcount == 0:
+            arg = func()
+        else:
+            arg = func(arg)
         print(arg)
 
 

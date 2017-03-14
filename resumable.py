@@ -1,5 +1,6 @@
 import ast
 import inspect
+import warnings
 import linecache
 from uuid import uuid4
 from collections import OrderedDict
@@ -86,7 +87,8 @@ class Visitor(ast.NodeVisitor):
             # it's possible more are actually supported,
             # but i'm hesitant to just allow them without
             # further testing
-            assert isinstance(user, (ast.Return, ast.Assign))
+            if not isinstance(user, (ast.Return, ast.Assign)):
+                warnings.warn('This is untested')
 
             # sanity checking
             assert user.parent_field == 'body', user.parent_field
@@ -124,12 +126,9 @@ class Visitor(ast.NodeVisitor):
             if name is None:
                 raise Exception('A non-closing split must have a name {}'.format(lineno))
 
-        args = (
-            []
-            if isinstance(user, ast.Return)
-            else
-            [ast.arg(user.targets[0].id, None)]
-        )
+        args = []
+        if isinstance(user, ast.Assign):
+            args = [ast.arg(user.targets[0].id, None)]
 
         return ast.arguments(
             args=args,
