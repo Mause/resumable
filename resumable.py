@@ -106,6 +106,7 @@ class Visitor(ast.NodeVisitor):
                 decorator_list=[],
                 returns=[]
             )
+            self.current[self.name].lineno = value.lineno
 
             self.last_idx = user.parent_field_index
             self.name = name
@@ -156,7 +157,11 @@ def extract(env, node, name):
 
 def rebuild(function):
     assert callable(function)
-    root, = ast.parse(inspect.getsource(function)).body
+    lines, lineno = inspect.getsourcelines(function)
+    root, = ast.parse('\n'.join(lines)).body
+
+    ast.increment_lineno(root, lineno)
+
     root = ParentNodeTransformer().visit(root)
 
     visitor = Visitor()
