@@ -107,7 +107,7 @@ class Visitor(ast.NodeVisitor):
                 args=self.args,
                 body=body,
                 decorator_list=[],
-                returns=[]
+                returns=None
             )
             self.current[self.name].lineno = value.lineno
 
@@ -134,6 +134,8 @@ class Visitor(ast.NodeVisitor):
         return ast.arguments(
             args=args,
             vararg=None,
+            kwonlyargs=[],
+            kw_defaults=[],
             kwarg=None,
             defaults=[]
         )
@@ -150,7 +152,10 @@ def extract(env, node, name):
     linecache.cache[filename] = len(source), None, lines, filename
     assert filename in linecache.cache
 
-    code = compile(source, filename=filename, mode='exec')
+    node = ast.Module(body=[node])
+    node = ast.fix_missing_locations(node)
+
+    code = compile(node, filename=filename, mode='exec')
     exec(code, loc, loc)
     return loc[name]
 
