@@ -19,6 +19,11 @@ def get_sub(lst, pred):
 
 
 class ToSource(SourceGeneratorNodeVisitor):
+    '''
+    The changes in here are primarily to patch
+    around differences between python versions
+    (I've tested with Python 3.5)
+    '''
 
     @classmethod
     def to_source(cls, node):
@@ -38,6 +43,8 @@ class ToSource(SourceGeneratorNodeVisitor):
         return super().visit_Call(node)
 
     def visit_Lambda(self, node):
+        # until i can get the ast compiling directly,
+        # we need to make sure precendence is correct
         self.write('(')
         super().visit_Lambda(node)
         self.write(')')
@@ -71,8 +78,15 @@ class Visitor(ast.NodeVisitor):
             else:
                 name = None
 
+            # this is the expression that contains the call,
+            # or basically the value of the assignment/return
             expr = node.parent
             assign = expr.parent
+
+            # it's possible more are actually supported,
+            # but i'm hesitant to just allow them without
+            # further testing
+            assert isinstance(assign, (ast.Return, ast.Assign))
 
             # sanity checking
             assert assign.parent_field == 'body', assign.parent_field
