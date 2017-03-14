@@ -118,14 +118,17 @@ class Visitor(ast.NodeVisitor):
         return super().generic_visit(node)
 
     def get_args(self, user, name):
-        lineno = user.lineno
+        msg = 'have a name, on line {} of function {}'.format(
+            user.lineno,
+            user.parent.name
+        )
 
         if isinstance(user, ast.Return):
             if name is not None:
-                raise Exception('A closing split cannot have a name {}'.format(lineno))
+                raise Exception('A closing split cannot {}'.format(msg))
         else:
             if name is None:
-                raise Exception('A non-closing split must have a name {}'.format(lineno))
+                raise Exception('A non-closing split must {}'.format(msg))
 
         args = []
         if isinstance(user, ast.Assign):
