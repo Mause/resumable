@@ -141,16 +141,20 @@ class Visitor(ast.NodeVisitor):
         )
 
 
-def extract(env, node, name):
-    loc = dict(env)
+def cache_code(node):
     filename = '<ast_{}>'.format(uuid4().hex)
     source = ToSource.to_source(node)
-
-    print(source)
 
     lines = [line + '\n' for line in source.splitlines()]
     linecache.cache[filename] = len(source), None, lines, filename
     assert filename in linecache.cache
+
+    return filename
+
+
+def extract(env, node, name):
+    loc = dict(env)
+    filename = cache_code(node)
 
     node = ast.Module(body=[node])
     node = ast.fix_missing_locations(node)
