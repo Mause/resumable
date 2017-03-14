@@ -82,7 +82,7 @@ class Visitor(ast.NodeVisitor):
             # this is the expression that contains the call,
             # or basically the value of the assignment/return
             expr = node.parent
-            user = expr.parent
+            user = expr.parent  # by user we mean user of the value
 
             # it's possible more are actually supported,
             # but i'm hesitant to just allow them without
