@@ -132,7 +132,9 @@ class Visitor(ast.NodeVisitor):
 
         args = []
         if isinstance(user, ast.Assign):
-            args = [ast.arg(user.targets[0].id, None)]
+            target = user.targets[0]
+            names = target.elts if isinstance(target, ast.Tuple) else [target]
+            args = [ast.arg(name.id, None) for name in names]
 
         return ast.arguments(
             args=args,

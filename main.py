@@ -21,6 +21,10 @@ def example(_):
 
     split(print, 'derp')()
 
+    a, b, c = split(get, 'multiple')('abc')
+
+    print(a, b, c)
+
     return split(get)('otherworldly')
 
 
