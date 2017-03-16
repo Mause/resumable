@@ -3,6 +3,7 @@ import inspect
 import warnings
 import linecache
 from uuid import uuid4
+from textwrap import dedent
 from collections import OrderedDict
 from astmonkey.transformers import ParentNodeTransformer
 from astmonkey.visitors import SourceGeneratorNodeVisitor
@@ -177,6 +178,7 @@ def rebuild(function):
     lines, lineno = inspect.getsourcelines(function)
 
     lines = ''.join(lines)
+    lines = dedent(lines)
     lines = '\n' * (lineno - 1) + lines
 
     root, = ast.parse(lines).body
