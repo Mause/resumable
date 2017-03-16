@@ -74,11 +74,6 @@ class Visitor(ast.NodeVisitor):
 
     def visit_Call(self, node):
         if getattr(node.func, 'id', None) == 'split':
-            if len(node.args) == 2:
-                name = node.args[1].s
-            else:
-                name = None
-
             # this is the expression that contains the call,
             # or basically the value of the assignment/return
             expr = node.parent
@@ -112,6 +107,8 @@ class Visitor(ast.NodeVisitor):
             self.current[self.name].lineno = value.lineno
 
             self.last_idx = user.parent_field_index
+
+            name = node.args[1].s if len(node.args) == 2 else None
             self.name = name
             self.args = self.get_args(user, name)
 
