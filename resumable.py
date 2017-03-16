@@ -72,6 +72,17 @@ class Visitor(ast.NodeVisitor):
         self.args = node.args
         return super().generic_visit(node)
 
+    def function_from(self, name, args, body, lineno):
+        func = ast.FunctionDef(
+            name=name,
+            args=args,
+            body=body,
+            decorator_list=[],
+            returns=None
+        )
+        func.lineno = lineno
+        return func
+
     def visit_Call(self, node):
         if getattr(node.func, 'id', None) == 'split':
             # this is the expression that contains the call,
@@ -97,14 +108,9 @@ class Visitor(ast.NodeVisitor):
             body.append(ast.Return(value))
             body[-1].lineno = value.lineno
 
-            self.current[self.name] = ast.FunctionDef(
-                name=self.name,
-                args=self.args,
-                body=body,
-                decorator_list=[],
-                returns=None
+            self.current[self.name] = self.function_from(
+                self.name, self.args, body, value.lineno
             )
-            self.current[self.name].lineno = value.lineno
 
             self.last_idx = user.parent_field_index
 
