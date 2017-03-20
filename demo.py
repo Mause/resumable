@@ -11,8 +11,8 @@ app = Flask(__name__)
 # and response (this is not needed in flask)
 @rebuild
 def controller(request):
-
     page = '''
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <form action="/c/welcomed" method=post>
         <input name="name"/>
         <button type=submit>Submit</button>
@@ -22,6 +22,7 @@ def controller(request):
     response = split(lambda: page, 'welcomed')()
 
     page = '''
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <form action="/c/my_name" method=post>
         <label>
             Hi, {}, my name is
