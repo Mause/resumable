@@ -74,7 +74,8 @@ class Visitor(ast.NodeVisitor):
 
     def visit_FunctionDef(self, node):
         self.current = self.parts[node] = OrderedDict()
-        self.name = node.name
+
+        self.function_name = self.name = node.name
         self.args = node.args
         self.last_idx = -1
 
@@ -131,7 +132,7 @@ class Visitor(ast.NodeVisitor):
     def get_args(self, user, name):
         msg = 'have a name, on line {} of function {}'.format(
             user.lineno,
-            user.parent.name
+            self.function_name
         )
 
         if isinstance(user, ast.Return):
