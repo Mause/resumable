@@ -130,6 +130,7 @@ class Visitor(ast.NodeVisitor):
             )
 
             self.last_idx = user.parent_field_index
+            assert self.last_idx is not None, (user)
 
             name = node.args[1].s if len(node.args) == 2 else None
             self.name = name
