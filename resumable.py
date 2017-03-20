@@ -69,11 +69,9 @@ class ToSource(SourceGeneratorNodeVisitor):
 class Visitor(ast.NodeVisitor):
 
     def __init__(self):
-        self.functions = {}
-        self.current = None
+        self.functions = OrderedDict()
 
     def visit_FunctionDef(self, node):
-        self.current = self.parts[node] = OrderedDict()
 
         self.function_name = self.name = node.name
         self.args = node.args
