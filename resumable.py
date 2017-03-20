@@ -71,13 +71,13 @@ class Visitor(ast.NodeVisitor):
     def __init__(self):
         self.functions = {}
         self.current = None
-        self.name = None
-        self.last_idx = -1
 
     def visit_FunctionDef(self, node):
         self.current = self.parts[node] = OrderedDict()
         self.name = node.name
         self.args = node.args
+        self.last_idx = -1
+
         return super().generic_visit(node)
 
     def function_from(self, name, args, body, lineno):
