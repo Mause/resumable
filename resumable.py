@@ -16,6 +16,10 @@ def split(func, name=None):
     return func, name
 
 
+def value(val, name=None):
+    return val, name
+
+
 def get_sub(lst, pred):
     for subnode in lst:
         if pred(subnode):
