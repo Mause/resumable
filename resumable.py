@@ -127,7 +127,8 @@ class Visitor(ast.NodeVisitor):
             self.name = name
             self.args = self.get_args(user, name)
 
-        return super().generic_visit(node)
+        else:
+            return super().generic_visit(node)
 
     def get_args(self, user, name):
         msg = 'have a name, on line {} of function {}'.format(
