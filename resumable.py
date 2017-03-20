@@ -72,6 +72,8 @@ class Visitor(ast.NodeVisitor):
         self.functions = OrderedDict()
 
     def visit_FunctionDef(self, node):
+        if hasattr(self, 'function_name'):
+            return
 
         self.function_name = self.name = node.name
         self.args = node.args
