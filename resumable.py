@@ -112,6 +112,7 @@ class Visitor(ast.NodeVisitor):
             field = getattr(user.parent, user.parent_field)
             body = field[self.last_idx + 1:user.parent_field_index]
 
+            user = expr.parent
             value = user.value
             value.func = value.func.args[0]  # remove call to split
             body.append(ast.Return(value))
