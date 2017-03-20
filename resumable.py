@@ -94,8 +94,10 @@ class Visitor(ast.NodeVisitor):
         return func
 
     def visit_Call(self, node):
-        if getattr(node.func, 'id', None) in {SPLIT, VALUE}:
-            is_value = node.func.id == VALUE
+        call_id = getattr(node.func, 'id', None)
+
+        if call_id in {SPLIT, VALUE}:
+            is_value = call_id == VALUE
 
             # this is the expression that contains the call,
             # or basically the value of the assignment/return
@@ -113,8 +115,7 @@ class Visitor(ast.NodeVisitor):
             assert user.parent_field == 'body', user.parent_field
             assert isinstance(user.parent, ast.FunctionDef)
 
-            field = getattr(user.parent, user.parent_field)
-            body = field[self.last_idx + 1:user.parent_field_index]
+            body = user.parent.body[self.last_idx + 1:user.parent_field_index]
 
             value = user.value
             if is_value:
