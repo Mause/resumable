@@ -19,7 +19,7 @@ def controller(request):
     </form>
     '''
 
-    response = split(lambda: page, 'welcomed')()
+    response = value(page, 'welcomed')
 
     page = '''
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -32,9 +32,9 @@ def controller(request):
     </form>
     '''.format(response.form['name'])
 
-    response = split(lambda: page, 'my_name')()
+    response = value(page, 'my_name')
 
-    return split(lambda: 'Sweet, my name is {}!'.format(response.form['my_name']))()
+    return value('Sweet, my name is {}!'.format(response.form['my_name']))
 
 
 @app.route('/c/<name>', methods=['POST', 'GET'])
