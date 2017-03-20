@@ -14,6 +14,18 @@ def test_simple():
     eq_(original, 'HELLO')
 
 
+def test_value():
+    @rebuild
+    def function(original):
+        return value(original + ' world')
+
+    original = 'hello'
+
+    original = function['function'](original)
+
+    eq_(original, 'hello world')
+
+
 def test_nested():
     @rebuild
     def first(a):

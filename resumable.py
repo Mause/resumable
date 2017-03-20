@@ -9,8 +9,15 @@ from astmonkey.transformers import ParentNodeTransformer
 from astmonkey.visitors import SourceGeneratorNodeVisitor
 
 
+SPLIT = 'split'
+
+
 def split(func, name=None):
     return func, name
+
+
+def value(val, name=None):
+    return val, name
 
 
 def get_sub(lst, pred):
@@ -85,7 +92,7 @@ class Visitor(ast.NodeVisitor):
         return func
 
     def visit_Call(self, node):
-        if getattr(node.func, 'id', None) == 'split':
+        if getattr(node.func, 'id', None) == SPLIT:
             # this is the expression that contains the call,
             # or basically the value of the assignment/return
             expr = node.parent
