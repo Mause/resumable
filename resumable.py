@@ -69,7 +69,7 @@ class ToSource(SourceGeneratorNodeVisitor):
 class Visitor(ast.NodeVisitor):
 
     def __init__(self):
-        self.parts = {}
+        self.functions = {}
         self.current = None
         self.name = None
         self.last_idx = -1
@@ -116,7 +116,7 @@ class Visitor(ast.NodeVisitor):
             body.append(ast.Return(value))
             body[-1].lineno = value.lineno
 
-            self.current[self.name] = self.function_from(
+            self.functions[self.name] = self.function_from(
                 self.name, self.args, body, value.lineno
             )
 
@@ -193,9 +193,8 @@ def rebuild(function):
 
     visitor = Visitor()
     visitor.visit(root)
-    parts = visitor.parts[root]
 
     return OrderedDict(
         (name, extract(function.__globals__, node, name))
-        for name, node in parts.items()
+        for name, node in visitor.functions.items()
     )
