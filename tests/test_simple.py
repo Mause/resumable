@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from nose.tools import eq_
 from resumable import rebuild, split
 
