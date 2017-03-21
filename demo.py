@@ -6,31 +6,32 @@ from resumable import rebuild, split
 
 app = Flask(__name__)
 
+def form(action, contents):
+    return '''
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <form action="{}" method=post>
+        {}
+        <button type=submit>Submit</button>
+    </form>
+    '''.format(action, contents)
 
 # for the purposes of this demo, we will explicitly pass request
 # and response (this is not needed in flask)
 @rebuild
 def controller(_):
-    page = '''
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <form action="/c/welcomed" method=post>
-        <input name="name"/>
-        <button type=submit>Submit</button>
-    </form>
-    '''
+    page = form('/c/welcomed', '<input name="name"/>')
 
     response = value(page, 'welcomed')
 
-    page = '''
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <form action="/c/my_name" method=post>
+    page = form(
+        '/c/my_name', 
+        '''
         <label>
             Hi, {}, my name is
             <input name="my_name"/>
         </label>
-        <button type=submit>Submit</button>
-    </form>
-    '''.format(response.form['name'])
+        '''.format(response.form['name'])
+    )
 
     response = value(page, 'my_name')
 
