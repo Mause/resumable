@@ -2,7 +2,7 @@
 
 from flask import Flask, redirect, request
 
-from resumable import rebuild, split
+from resumable import rebuild, value
 
 app = Flask(__name__)
 
