@@ -116,13 +116,13 @@ class Visitor(ast.NodeVisitor):
             self.functions[self.name] = self.function_from(
                 self.name, self.args, body, self.lineno
             )
+
             self.lineno = value.lineno
-
             self.last_idx = user.parent_field_index
-            assert self.last_idx is not None, (user)
-
             self.name = node.args[1].s if len(node.args) == 2 else None
             self.args = self.get_args(user, self.name)
+
+            assert self.last_idx is not None, (user)
 
         else:
             return super().generic_visit(node)
