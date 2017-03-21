@@ -9,12 +9,7 @@ from astmonkey.transformers import ParentNodeTransformer
 from astmonkey.visitors import SourceGeneratorNodeVisitor
 
 
-SPLIT = 'split'
 VALUE = 'value'
-
-
-def split(func, name=None):
-    return func, name
 
 
 def value(val, name=None):
@@ -97,14 +92,10 @@ class Visitor(ast.NodeVisitor):
     def visit_Call(self, node):
         call_id = getattr(node.func, 'id', None)
 
-        if call_id in {SPLIT, VALUE}:
-            is_value = call_id == VALUE
-
+        if call_id == VALUE:
             # this is the expression that contains the call,
             # or basically the value of the assignment/return
             user = node.parent
-            if not is_value:
-                user = user.parent  # by user we mean user of the value
 
             # it's possible more are actually supported,
             # but i'm hesitant to just allow them without
@@ -118,11 +109,7 @@ class Visitor(ast.NodeVisitor):
 
             body = user.parent.body[self.last_idx + 1:user.parent_field_index]
 
-            value = user.value
-            if is_value:
-                value = value.args[0]
-            else:
-                value.func = value.func.args[0]  # remove call to split
+            value = user.value.args[0]
             body.append(ast.Return(value))
             body[-1].lineno = value.lineno
 
