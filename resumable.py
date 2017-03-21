@@ -199,7 +199,7 @@ def rebuild(function):
 
     lines = ''.join(lines)
     lines = dedent(lines)
-    lines = '\n' * (lineno - 1) + lines
+    lines = '\n' * lineno + lines
 
     root, = ast.parse(lines).body
     root = ParentNodeTransformer().visit(root)
