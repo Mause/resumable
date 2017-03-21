@@ -10,7 +10,7 @@ app = Flask(__name__)
 # for the purposes of this demo, we will explicitly pass request
 # and response (this is not needed in flask)
 @rebuild
-def controller(request):
+def controller(_):
     page = '''
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <form action="/c/welcomed" method=post>
