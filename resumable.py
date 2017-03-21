@@ -77,6 +77,7 @@ class Visitor(ast.NodeVisitor):
             return
 
         self.function_name = self.name = node.name
+        self.lineno = node.lineno
         self.args = node.args
         self.last_idx = -1
 
@@ -126,8 +127,9 @@ class Visitor(ast.NodeVisitor):
             body[-1].lineno = value.lineno
 
             self.functions[self.name] = self.function_from(
-                self.name, self.args, body, value.lineno
+                self.name, self.args, body, self.lineno
             )
+            self.lineno = value.lineno
 
             self.last_idx = user.parent_field_index
             assert self.last_idx is not None, (user)
