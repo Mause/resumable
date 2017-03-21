@@ -13,6 +13,12 @@ VALUE = 'value'
 
 
 def value(val, name=None):
+    '''
+    This function doesnt actually do anything,
+    it just makes it nicer to use this library
+    by avoiding linter errors about non-existant
+    functions
+    '''
     return val, name
 
 
