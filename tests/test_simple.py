@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 
 from nose.tools import eq_
-from resumable import rebuild, split
+from resumable import rebuild, value
 
 
 def test_simple():
     @rebuild
     def function(original):
-        return split(str.upper)(original)
+        return value(original.upper())
 
     original = 'hello'
 
@@ -33,8 +33,8 @@ def test_nested():
     def first(a):
         @rebuild
         def second(b):
-            return split(lambda s: s + 'b')(b)
-        return split(second['second'])(a)
+            return value(b + 'b')
+        return value(second['second'](a))
 
     original = 'ba'
 
