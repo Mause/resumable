@@ -19,23 +19,22 @@ def form(action, contents):
 # and response (this is not needed in flask)
 @rebuild
 def controller(_):
-    page = form('/c/welcomed', '<input name="name"/>')
+    page = form('/c/welcomed', '<input name="human_name"/>')
 
     response = value(page, 'welcomed')
 
     page = form(
-        '/c/my_name', 
+        '/c/computer_name',
         '''
         <label>
             Hi, {}, my name is
-            <input name="my_name"/>
+            <input name="computer_name"/>
         </label>
         '''.format(response.form['name'])
     )
+    response = value(page, 'computer_name')
 
-    response = value(page, 'my_name')
-
-    return value('Sweet, my name is {}!'.format(response.form['my_name']))
+    return value('Sweet, my name is {}!'.format(response.form['computer_name']))
 
 
 @app.route('/c/<name>', methods=['POST', 'GET'])
