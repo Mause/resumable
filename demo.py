@@ -24,7 +24,7 @@ def controller(_):
     response = value(page, 'welcomed')
 
     page = form(
-        '/c/computer_name',
+        '/c/computer_name?human_name={human_name}'.format_map(response.form),
         '''
         <label>
             Hi, {}, my name is
@@ -34,7 +34,7 @@ def controller(_):
     )
     response = value(page, 'computer_name')
 
-    return value('Sweet, my name is {}!'.format(response.form['computer_name']))
+    return value('Sweet, {human_name}, my name is {computer_name}!'.format_map(response.values))
 
 
 @app.route('/c/<name>', methods=['POST', 'GET'])
