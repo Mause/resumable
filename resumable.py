@@ -177,7 +177,7 @@ def extract(env, node, name):
     loc = dict(env)
     filename = cache_code(node)
 
-    node = ast.Module(body=[node])
+    node = ast.Module(body=[node], type_ignores=[])
     node = ast.fix_missing_locations(node)
 
     code = compile(node, filename=filename, mode='exec')
