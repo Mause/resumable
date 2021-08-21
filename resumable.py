@@ -5,7 +5,7 @@ import linecache
 from uuid import uuid4
 from textwrap import dedent
 from collections import OrderedDict
-from astmonkey.transformers import ParentNodeTransformer
+from astmonkey.transformers import ParentChildNodeTransformer
 from astmonkey.visitors import SourceGeneratorNodeVisitor
 
 
@@ -194,7 +194,7 @@ def rebuild(function):
     lines = '\n' * lineno + lines
 
     root, = ast.parse(lines).body
-    root = ParentNodeTransformer().visit(root)
+    root = ParentChildNodeTransformer().visit(root)
 
     visitor = Visitor()
     visitor.visit(root)
